@@ -37,7 +37,7 @@ const UserTable = () => {
           );
         setFilteredUsers(filtered);
       } else {
-        setFilteredUsers(user.users.slice(1));
+        setFilteredUsers(user.users);
       }
     } else if (Array.isArray(user) && user.length === 0) {
       setFilteredUsers([]);
