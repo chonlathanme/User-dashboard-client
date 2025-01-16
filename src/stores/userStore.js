@@ -7,21 +7,14 @@ const userStore = create((set) => ({
   error: null,
 
   actionGetUser: async () => {
+    set({ loading: true });
     try {
-      set({ loading: true, error: null });
       const response = await userApi.getUser();
-      if (response?.data) {
-        set({ 
-          user: response.data,
-          loading: false 
-        });
-      }
+      const data = response;
+      set({ user: data, loading: false });
     } catch (error) {
-      console.error('Get users error:', error);
-      set({ 
-        error: error.message,
-        loading: false 
-      });
+      console.error('Error fetching users:', error);
+      set({ user: { success: false, users: [] }, loading: false });
     }
   },
 

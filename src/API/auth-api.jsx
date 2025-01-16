@@ -1,12 +1,30 @@
 import axios from "axios";
 
+// กำหนด base URL
+axios.defaults.baseURL = 'http://localhost:3000';
+
 const authApi = {
-  loginGoogle: async (profile) => {
+  loginGoogle: async (tokenResponse) => {
     try {
-      const response = await axios.post("/api/auth/google-login", profile);
+      console.log('Token Response:', tokenResponse);
+
+      const response = await axios.post("/api/auth/google-login", 
+        { access_token: tokenResponse.access_token },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+      }
+      
       return response.data;
     } catch (error) {
-      throw error.response.data;
+      console.error('Login API Error:', error.response?.data || error);
+      throw error.response?.data || error;
     }
   },
 

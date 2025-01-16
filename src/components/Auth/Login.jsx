@@ -8,29 +8,23 @@ const Login = () => {
   const { login } = useAuthStore();
 
   const googleLogin = useGoogleLogin({
-    onSuccess: async (response) => {
+    onSuccess: async (tokenResponse) => {
       try {
-        await login(response);
+        console.log('Google OAuth Success:', tokenResponse);
+        await login(tokenResponse);
         navigate("/users");
       } catch (error) {
         console.error("Login failed:", error);
+        alert("Login failed. Please try again.");
       }
     },
-    onError: (error) => console.error("Login Failed:", error),
-    flow: 'auth-code',
-    popup: true,
-    flow_handler: (options) => {
-      const width = 500;
-      const height = 600;
-      const left = (window.innerWidth - width) / 2;
-      const top = (window.innerHeight - height) / 2;
-
-      return window.open(
-        options.url,
-        'Google Login',
-        `width=${width},height=${height},top=${top},left=${left},toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes`
-      );
-    }
+    onError: (error) => {
+      console.error("Login Failed:", error);
+      alert("Login failed. Please try again.");
+    },
+    scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+    flow: 'implicit',
+    access_type: 'offline'
   });
 
   return (
