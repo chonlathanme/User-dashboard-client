@@ -14,8 +14,8 @@ const userApi = {
   getUser: async () => {
     try {
       const response = await axios.get('/api/user/get-users');
-      console.log('Raw API Response:', response); // Log the full response
-      return response.data; // Ensure you're returning only the data part
+      console.log('Raw API Response:', response);
+      return response.data;
     } catch (error) {
       console.error('API Error:', error);
       throw error;
